@@ -1,0 +1,72 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.8'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21' // plugin 추가
+    id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21' //kotlin에서 jpa 사용시 기본 생성자 안만들게 하기 위한 플러그인
+
+    // kotlin jpa all open (아래 설명)
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.21"
+}
+
+group = 'com.group'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    //Caused by: java.lang.ClassNotFoundException: kotlin.reflect.full.KClasses -> 테스트 실행시 코틀린 리플렉션 못 갖고올 때
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
+}
+
+// kotlin jpa all open (아래 설명)
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// java 컴파일 버전이랑 동일하게 작성
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+/**
+ * 아시다시피, Kotlin은 기본적으로 Class도 final, 함수도 final입니다!! (즉, 상속과 오버라이드를 막아두었습니다!)
+ 하지만 JPA를 사용할 때 Proxy Lazy Fetching을 완전히 이용하려면 (27강에서 Lazy Fetching에 대한 이야기가 있습니다!) 클래스가 상속 가능해야 합니다!! 제가 확인해본 바로는 @OneToMany에 있어서는 Lazy Fetching이 동작하지만 @ManyToOne에 대해서는 Lazy Fetching 옵션을 명시적으로 주더라도 동작하지 않았습니다.
+ 그래서 all-open 기능을 통해 @Entity 클래스들은 Decompile을 했을 때도 class가 열려 있게끔 처리해주어야 하고, 위의 스크립트가 바로 그런 역할을 수행하게 됩니다.
+ */
+
+/**
+plugins {
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.21"
+}
+
+// plugins, dependencies와 같은 Level (즉 build.gradle 최상단)
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+ */
