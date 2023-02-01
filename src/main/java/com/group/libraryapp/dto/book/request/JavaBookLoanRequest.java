@@ -1,14 +1,15 @@
 package com.group.libraryapp.dto.book.request;
 
-public class BookReturnRequest {
+public class JavaBookLoanRequest {
 
   private String userName;
-  private String bookName;
 
-  public BookReturnRequest(String userName, String bookName) {
+  public JavaBookLoanRequest(String userName, String bookName) {
     this.userName = userName;
     this.bookName = bookName;
   }
+
+  private String bookName;
 
   public String getUserName() {
     return userName;

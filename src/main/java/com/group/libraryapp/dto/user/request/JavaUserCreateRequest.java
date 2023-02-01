@@ -1,15 +1,11 @@
 package com.group.libraryapp.dto.user.request;
 
-import org.jetbrains.annotations.NotNull;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
-public class UserCreateRequest {
+public class JavaUserCreateRequest {
 
   private String name;
   private Integer age;
 
-  public UserCreateRequest(String name, Integer age) {
+  public JavaUserCreateRequest(String name, Integer age) {
     this.name = name;
     this.age = age;
   }

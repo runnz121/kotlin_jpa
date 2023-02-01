@@ -6,7 +6,11 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21' //kotlin에서 jpa 사용시 기본 생성자 안만들게 하기 위한 플러그인
 
     // kotlin jpa all open (아래 설명)
-    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.21"
+    id 'org.jetbrains.kotlin.plugin.allopen' version '1.6.21'
+
+    // kotlin으로 spring @Transactional 사용하기 위한 plugin 추가
+    // 스프링 빈, 메서드를 자동적으로 open 해준다
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
 }
 
 group = 'com.group'
@@ -26,6 +30,8 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     //Caused by: java.lang.ClassNotFoundException: kotlin.reflect.full.KClasses -> 테스트 실행시 코틀린 리플렉션 못 갖고올 때
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
+    //JsonParse error -> Jackson이 코틀린으로 변환 가능하도록 하는 모듈
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
 }
 
 // kotlin jpa all open (아래 설명)
