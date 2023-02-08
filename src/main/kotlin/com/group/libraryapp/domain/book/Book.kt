@@ -1,13 +1,13 @@
 package com.group.libraryapp.domain.book
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Book(
     val name: String,
+
+    @Enumerated(EnumType.STRING)
+    val type: BookType,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +20,21 @@ class Book(
         }
     }
 
+    // Object Mother 패턴
+    // 테스트를 위해 생성된 객체를 테스트 fixture 라고함
+    companion object {
+        fun fixture(
+            name: String = "책 이름",
+            type: BookType = BookType.COMPUTER,
+            id: Long? = null,
+        ): Book {
+            return Book(
+                name = name,
+                type = type,
+                id = id,
+            )
+        }
+    }
+
 }
+
